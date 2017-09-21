@@ -31,7 +31,6 @@ sprocket.before { (current, from) in }
 sprocket.on { (current, from) in }
 
 sprocket.after { (current, from) in }
-}
 ```
 
 ## Installation
