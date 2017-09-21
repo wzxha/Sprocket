@@ -1,6 +1,0 @@
-framework module Sprocket {
-  umbrella header "Sprocket-umbrella.h"
-
-  export *
-  module * { export * }
-}
