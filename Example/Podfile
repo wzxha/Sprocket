@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'Sprocket_Example' do
+  pod 'Sprocket', :path => '../'
+
+  target 'Sprocket_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
