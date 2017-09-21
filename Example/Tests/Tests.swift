@@ -1,29 +1,55 @@
 import UIKit
 import XCTest
-import Sprocket
+@testable import Sprocket
 
 class Tests: XCTestCase {
     
+    enum State: Int, Stateable  {
+        case getUp
+        case eat
+        case sleep
+    }
+    
+    let sprocket = Sprocket<State>(idle: .getUp)
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+
+        sprocket.rules = [
+            [.sleep] >>> .getUp,
+            [.getUp] >>> .eat,
+            [.eat]   >>> .sleep,
+        ]
+
+        sprocket.before { (current, from) in }
+
+        sprocket.on { (current, from) in }
+
+        sprocket.after { (current, from) in }
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    func testCurrentState() {
+        assert(.getUp == sprocket.current, "idle will be GetUp")
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+    func testRules() {
+        let getUpToSleep = sprocket.to(.sleep)
+        assert(false == getUpToSleep, "GetUp can't to Sleep, but it has gone")
+        
+        let getUpToEat = sprocket.to(.eat)
+        assert(getUpToEat, "GetUp can to Eat, but it has not gone")
+        
+        let eatToSleep = sprocket.to(.sleep)
+        assert(eatToSleep, "Eat can to Sleep, but it has not gone")
+        
+        let sleepToGetUp = sprocket.to(.getUp)
+        assert(sleepToGetUp, "Sleep can to GetUp, but it has not gone")
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure() {
-            // Put the code you want to measure the time of here.
-        }
+    func testEnumAllCases() {
+        let allCases = State.allCases
+        
+        assert(allCases == [.getUp, .eat, .sleep], "State.allCases: '\(allCases)' are't equal to '[.getUp, .eat, .sleep]'")
     }
     
 }
