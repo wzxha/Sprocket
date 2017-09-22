@@ -27,12 +27,12 @@
 
 import Foundation
 
-public protocol Stateable: Equatable {
-    init?(rawValue: Int)
-}
+public protocol Stateable: Equatable, RawRepresentable {}
 
-extension Stateable {
-    static var allCases: [Self] {
+public extension Stateable {
+    typealias RawValue = Int
+    
+    static var all: [Self] {
         var idx = 0
         
         let generator: AnyIterator<Self> = AnyIterator {

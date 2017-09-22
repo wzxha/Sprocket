@@ -27,65 +27,120 @@
 
 import Foundation
 
-public class Sprocket<State: Stateable> {
-    
-    public typealias Event = (State, State) -> Void
+private let Before = "before"
+private let On = "on"
+private let After = "after"
 
-    private var before: Event?
+public class Sprocket<State: Stateable> {
+    // from -> to
+    public typealias Flow = (State, State) -> Void
+
+    // from ->
+    public typealias SingleFlow = (State) -> Void
+
+    private var before: Flow?
     
-    private var on: Event?
+    private var on: Flow?
     
-    private var after: Event?
+    private var after: Flow?
     
-    public var current: State
+    var current: State
     
     private var last: State?
     
     private let states: [State]
     
-    public init(idle: State) {
-        self.states = State.allCases
+    private var flows: [Int: [String: SingleFlow]] = [:]
+    
+    public init(states: [State] = State.all, idle: State) {
+        self.states = states
         current = idle
     }
     
     public var rules: [Rule<State>] = []
     
-    public func before(_ event: Event?) {
-        before = event
+    public func before(_ flow: @escaping Flow) {
+        before = flow
     }
     
-    public func on(_ event: Event?) {
-        on = event
+    public func on(_ flow: @escaping Flow) {
+        on = flow
     }
     
-    public func after(_ event: Event?) {
-        after = event
+    public func after(_ flow: @escaping Flow) {
+        after = flow
+    }
+    
+    public func before(_ state: State, flow: @escaping SingleFlow) {
+        set(singleFlow: flow, when: state, forKey: Before)
+    }
+    
+    public func on(_ state: State, flow: @escaping SingleFlow) {
+        set(singleFlow: flow, when: state, forKey: On)
+    }
+    
+    public func after(_ state: State, flow: @escaping SingleFlow) {
+        set(singleFlow: flow, when: state, forKey: After)
+    }
+    
+    private func set(singleFlow: @escaping SingleFlow, when state: State, forKey key: String) {
+        var flows: [String: SingleFlow]
+        
+        if let lastEvents = self.flows[state.rawValue] {
+            
+            flows = lastEvents
+        } else {
+            
+            flows = [:]
+        }
+        
+        flows[key] = singleFlow
+        
+        self.flows[state.rawValue] = flows
     }
     
     @discardableResult
     public func to(_ state: State) -> Bool {
         guard canTo(state) else {
-            
-            print("[Sprocket] \(current) can't to \(state)")
+            print("[Sprocket] ⚠️⚠️⚠️ \(current) can't to \(state)")
             return false
         }
         
-        if let last = last,
-           let after = after {
+        if let last = last {
+
+            if let stateEvents = flows[current.rawValue],
+               let afterStateEvent = stateEvents[After] {
+                
+                afterStateEvent(last)
+            }
             
-            after(current, last)
+            if let after = after {
+                after(last, current)
+            }
+        }
+        
+        if let stateEvents = flows[state.rawValue],
+           let beforeStateEvent = stateEvents[Before] {
+            
+            beforeStateEvent(current)
+        }
+        
+        if let before = before {
+            before(current, state)
+        }
+        
+        if let stateEvents = flows[state.rawValue],
+           let onStateEvent = stateEvents[On] {
+            
+            onStateEvent(current)
+        }
+        
+        if let on = on {
+            on(current, state)
         }
         
         last = current
         current = state
-        
-        if let before = before {
-            before(current, last!)
-        }
-        
-        if let on = on {
-            on(current, last!)
-        }
         
         return true
     }

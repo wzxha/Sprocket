@@ -25,9 +25,10 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-infix operator >>>: LogicalConjunctionPrecedence
+infix operator >>> : LogicalConjunctionPrecedence
 
 public struct Rule<State: Stateable> {
+    
     let state: State
     
     let allows: [State]
@@ -35,6 +36,7 @@ public struct Rule<State: Stateable> {
     public init(_ allows: [State], canTo state: State) {
         
         self.state = state
+        
         self.allows = allows
     }
 }
