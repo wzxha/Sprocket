@@ -15,6 +15,7 @@ enum State: Int, Stateable  {
     case getUp
     case eat
     case sleep
+    // case getUp = 1 ❌ Do not set the value!!!
 }
 ```
 
