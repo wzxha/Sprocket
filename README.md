@@ -8,7 +8,7 @@
 State machine on Swift4.0
 
 ## Use
-1. Create an `Int` enumeration that abides on the `Stateable` protocol
+**1. Create an `Int` enumeration that abides on the `Stateable` protocol**
 
 ```swift
 enum State: Int, Stateable  {
@@ -18,23 +18,26 @@ enum State: Int, Stateable  {
 }
 ```
 
-2. Use the enumeration to create a "Sprocket" and set its default state (idle)
+**2. Use the enumeration to create a "Sprocket" and set its default state (idle)**
 
 ```swift
 let sprocket = Sprocket<State>(idle: .getUp)
 ```
 
-3. Set its rules
+**3. Set its rules**
 
 ```swift
 sprocket.rules = [
     [.sleep] >>> .getUp,
     [.getUp] >>> .eat,
     [.eat]   >>> .sleep,
+
+    // if `[] >>> .getUp`, then any state can't to getUp
+    // if you don't set rule for some state, then any state can to the state
 ]
 ```
 
-4. Set up its state listening
+**4. Set up its state listening**
 
 ```swift
 sprocket.before { (from, to) in }
@@ -54,7 +57,7 @@ sprocket.on(.getUp) { from in }
 sprocket.after(.getUp) { from in }
 ```
 
-5. Use `func to:` to switch state
+**5. Use `func to:` to switch state**
 
 ```swift
 sprocket.to(.eat)
