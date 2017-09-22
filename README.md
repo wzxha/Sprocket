@@ -7,9 +7,8 @@
 
 State machine on Swift4.0
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
+## Use
+1. Create an `Int` enumeration that abides on the `Stateable` protocol
 
 ```swift
 enum State: Int, Stateable  {
@@ -17,21 +16,53 @@ enum State: Int, Stateable  {
     case eat
     case sleep
 }
+```
 
+2. Use the enumeration to create a "Sprocket" and set its default state (idle)
+
+```swift
 let sprocket = Sprocket<State>(idle: .getUp)
+```
 
+3. Set its rules
+
+```swift
 sprocket.rules = [
     [.sleep] >>> .getUp,
     [.getUp] >>> .eat,
     [.eat]   >>> .sleep,
 ]
-
-sprocket.before { (current, from) in }
-
-sprocket.on { (current, from) in }
-
-sprocket.after { (current, from) in }
 ```
+
+4. Set up its state listening
+
+```swift
+sprocket.before { (from, to) in }
+
+sprocket.on { (from, to) in }
+
+sprocket.after { (from, to) in }
+```
+
+you can listen to a single state also
+
+```swift
+sprocket.before(.getUp) { from in }
+
+sprocket.on(.getUp) { from in }
+
+sprocket.after(.getUp) { from in }
+```
+
+5. Use `func to:` to switch state
+
+```swift
+sprocket.to(.eat)
+```
+
+## Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Installation
 
