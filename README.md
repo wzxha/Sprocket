@@ -1,6 +1,6 @@
-# Sprocket [![CI Status](http://img.shields.io/travis/Wzxhaha/Sprocket.svg?style=flat)](https://travis-ci.org/Wzxhaha/Sprocket)[![Version](https://img.shields.io/cocoapods/v/Sprocket.svg?style=flat)](http://cocoapods.org/pods/Sprocket)[![License](https://img.shields.io/cocoapods/l/Sprocket.svg?style=flat)](http://cocoapods.org/pods/Sprocket)[![Platform](https://img.shields.io/cocoapods/p/Sprocket.svg?style=flat)](http://cocoapods.org/pods/Sprocket)
-
 ![image](https://raw.githubusercontent.com/Wzxhaha/Storehouse/master/Sprocket/Sprocket.png)
+
+# Sprocket [![CI Status](http://img.shields.io/travis/Wzxhaha/Sprocket.svg?style=flat)](https://travis-ci.org/Wzxhaha/Sprocket)[![Version](https://img.shields.io/cocoapods/v/Sprocket.svg?style=flat)](http://cocoapods.org/pods/Sprocket)[![License](https://img.shields.io/cocoapods/l/Sprocket.svg?style=flat)](http://cocoapods.org/pods/Sprocket)[![Platform](https://img.shields.io/cocoapods/p/Sprocket.svg?style=flat)](http://cocoapods.org/pods/Sprocket)
 
 State machine on Swift4.0
 
